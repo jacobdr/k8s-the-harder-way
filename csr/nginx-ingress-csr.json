@@ -1,0 +1,17 @@
+{
+  "CN": "ingress-nginx",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "hosts": ["*.k8s.local"],
+  "names": [
+    {
+      "C": "US",
+      "L": "Portland",
+      "O": "ingress-nginx",
+      "OU": "Kubernetes The Hard Way",
+      "ST": "Oregon"
+    }
+  ]
+}
