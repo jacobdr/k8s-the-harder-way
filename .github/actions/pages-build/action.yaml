@@ -3,9 +3,12 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - name: Install mdBook
+    - uses: actions-rs/toolchain@v1
+    - name: Install docs dependencies
       shell: bash
       run: |
+        sudo apt-get update
+        sudo apt-get install plantuml
         export DOWNLOAD_URL="https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz"
         curl --fail -O -L "${DOWNLOAD_URL}"
         tar xzf $(basename "${DOWNLOAD_URL}")
@@ -14,7 +17,7 @@ runs:
     - name: Generate Pages
       shell: bash
       run: |
-        mdbook build docs
+        make docs
     - name: Check index.html
       shell: bash
       run: |
