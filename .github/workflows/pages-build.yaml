@@ -18,23 +18,7 @@ jobs:
           mdbook --version
       - name: Generate Pages
         run: |
-          mkdir -p build
-          cat > build/index.html <<EOF
-          <!DOCTYPE html>
-          <html>
-          <body>
-
-          <h1>My First Heading</h1>
-          <p>My first paragraph.</p>
-
-          </body>
-          </html>
-          EOF
+          mdbook build docs
       - name: Check index.html
         run: |
-          cat build/index.html
-      - name: Deploy preview
-        uses: rossjrw/pr-preview-action@v1
-        with:
-          source-dir: ./build/
-          preview-branch: gh-pages
+          cat docs/book/index.html

@@ -15,25 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Generate Pages
+      - name: Debug
         run: |
-          mkdir -p build
-          cat > build/index.html <<EOF
-          <!DOCTYPE html>
-          <html>
-          <body>
-
-          <h1>My First Heading</h1>
-          <p>My first paragraph.</p>
-
-          </body>
-          </html>
-          EOF
-      - name: Check index.html
-        run: |
-          cat build/index.html
+          ls -lh ./.github/workflows/
+          cat ./.github/workflows/pages-build.yaml
+      - uses: ./.github/workflows/pages-build.yaml
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: ./build/
+          source-dir: ./docs/book
           preview-branch: gh-pages
