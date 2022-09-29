@@ -1,5 +1,4 @@
 output/*
-!output/
 .swp
 nginx.conf
 *.log

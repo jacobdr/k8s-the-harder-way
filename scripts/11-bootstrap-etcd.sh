@@ -142,14 +142,22 @@ function check_all_etcds_online() {
     local instance="${HOSTNAME_PREFIX}1"
 
     run_command_on_remote_host "${VM_RUNTIME}" "${instance}" "list etcd members" <<EOF
-        log_info "Checking etcd liveness from host \$(hostname -f)"
-        sudo ETCDCTL_API=3 etcdctl member list \
+        log_info "Checking etcd liveness from host ${instance}"
+        if ! sudo ETCDCTL_API=3 etcdctl member list \
             --endpoints=https://127.0.0.1:2379 \
             --cacert=/etc/etcd/ca.pem \
             --cert=/etc/etcd/kubernetes.pem \
             --key=/etc/etcd/kubernetes-key.pem \
             --dial-timeout=15s \
-            --command-timeout=10s
+            --command-timeout=10s;
+        then
+            log_error "etcd membership check seems to have failed"
+            sudo journalctl -xn --no-pager -u etcd --lines 25
+            exit 101
+        else
+            log_info "etcd is online and healthy"
+        fi
+
 EOF
     log_info "Completed check_all_etcds_online"
 }
@@ -185,7 +193,6 @@ EOF
     log_info "Waiting for etcd servers to start... sleeping first"
     sleep 15
     check_all_etcds_online
-
 }
 
 # https://stackoverflow.com/questions/2683279/how-to-detect-if-a-script-is-being-sourced

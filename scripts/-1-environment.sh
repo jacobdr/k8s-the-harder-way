@@ -4,8 +4,8 @@ CURRENT_DIRECTORY=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd
 export PROJECT_ROOT
 PROJECT_ROOT=$(cd "${CURRENT_DIRECTORY}/.." && pwd)
 
-# Runtime to use
-export VM_RUNTIME=lima
+# Runtime to use -- available options: docker | lima
+export VM_RUNTIME=docker
 
 # Constants used by the scripts
 export HELPERS_DIR="${PROJECT_ROOT}/scripts/helpers"
@@ -15,7 +15,13 @@ export KUBE_CONFIG_DIR="${OUTPUT_DIR}/kube-configs"
 export CSR_DIR="${PROJECT_ROOT}/csr"
 export CNT_VMS=3
 export HOSTNAME_PREFIX="vm"
-export CPU_ARCH="arm64"
+
+RAW_CPU_ARCH="$(uname -m)"
+if [[ "${RAW_CPU_ARCH}" =~ "arm64" || "${RAW_CPU_ARCH}" =~ "aarch64" ]]; then
+    export CPU_ARCH="arm64"
+else
+    export CPU_ARCH="amd64"
+fi
 
 # Load helper functions
 # shellcheck source=./helpers/load_helpers.sh
