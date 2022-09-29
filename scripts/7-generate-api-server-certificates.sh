@@ -34,6 +34,8 @@ log_info "Public IP addresses for k8s-apiserver certificates: ${PUBLIC_TRANSLATE
 
 KUBERNETES_HOSTNAMES=kubernetes,kubernetes.default,kubernetes.default.svc,kubernetes.default.svc.cluster,kubernetes.svc.cluster.local
 
+log_debug "Using CSR_DIR value of ${CSR_DIR}"
+
 cat >"${CSR_DIR}/kubernetes-csr.json" <<EOF
 {
   "CN": "kubernetes",
@@ -52,6 +54,10 @@ cat >"${CSR_DIR}/kubernetes-csr.json" <<EOF
   ]
 }
 EOF
+
+echo "JDR DEBUG CSR_DIR issue"
+ls -lh "${CSR_DIR}"
+cat "${CSR_DIR}"/*
 
 # TODO: Add hostnames for HA for the ingress IPs
 cfssl gencert \

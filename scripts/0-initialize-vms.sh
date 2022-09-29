@@ -10,8 +10,9 @@ set -euo pipefail
 log_info "Starting to create ${CNT_VMS} VMs with runtime ${VM_RUNTIME}"
 
 if [[ "${VM_RUNTIME}" = "docker" ]]; then
-    docker build -f "${PROJECT_ROOT}/Dockerfile" -t k8s-hard-way "${PROJECT_ROOT}"
-    docker ps -a | grep k8s-hard-way | awk '{print $1}' | xargs docker rm -f
+    docker build -f "${PROJECT_ROOT}/Dockerfile" -t k8s-hard-way --load "${PROJECT_ROOT}"
+    (docker ps -a | grep k8s-hard-way | awk '{print $1}' | xargs docker rm -f) &>/dev/null || :
+    sleep 2
     mkdir -p "${PROJECT_ROOT}/output/downloads"
 elif [[ "${VM_RUNTIME}" = "lima" ]]; then
     sudo rm -rf /private/var/run/lima

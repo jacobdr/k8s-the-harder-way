@@ -32,7 +32,7 @@ function install_system_libs() {
         log_info "need to install nerdctl binary"
         curl -O -L --fail https://github.com/containerd/nerdctl/releases/download/v0.23.0/${NERDCTL_TARBALL}
         tar xzf ${NERDCTL_TARBALL}
-        sudo cp /tmp/nerdctl /usr/local/bin
+        sudo cp nerdctl /usr/local/bin
     else
         log_info "nerdctl inalready installed"
     fi
@@ -361,9 +361,7 @@ function setup_interhost_networking() {
         printf "${hosts_file_contents}" >>"${temp_network_map_file}"
         log_info "Modified hosts file is at: ${temp_network_map_file} (hosts file permission: \$(ls -l /etc/hosts))"
         cat ${temp_network_map_file}
-        sudo su root
-        cat ${temp_network_map_file} > /etc/hosts
-        exit
+        sudo su root -c "cat ${temp_network_map_file} > /etc/hosts"
 EOC
 
     # Add routes to all the hosts
