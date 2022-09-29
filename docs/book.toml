@@ -5,6 +5,10 @@ multilingual = false
 src = "src"
 title = "k8s the hard(er) way"
 
+[build]
+build-dir = "book"
+create-missing = true
+
 # https://rust-lang.github.io/mdBook/format/configuration/renderers.html
 [output.html]
 # theme = "my-theme"

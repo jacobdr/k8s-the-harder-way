@@ -2,3 +2,4 @@ output/*
 .swp
 nginx.conf
 *.log
+docs/book

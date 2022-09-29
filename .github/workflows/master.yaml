@@ -1,5 +1,16 @@
+name: Master Build
 on:
   push:
     branches:
       - master
-      - releases/**
+jobs:
+  master-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/pr-build
+  master-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/pages-build
