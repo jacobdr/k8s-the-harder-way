@@ -21,6 +21,14 @@ docs: check-dev
 docs-watch: check-dev
 	./docs/mdbook-shim.sh watch --open docs
 
+## Get repo back to a clean slate
+clean:
+	rm -rf docs/book
+	rm -rf docs/bin
+	rm -rf outputs
+	rm -rf nginx.conf
+
+
 # https://gist.github.com/prwhite/8168133#gistcomment-2278355
 # https://gist.github.com/prwhite/8168133#gistcomment-2749866
 .PHONY: help

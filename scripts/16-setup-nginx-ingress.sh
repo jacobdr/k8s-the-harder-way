@@ -11,11 +11,11 @@ NGINX_TLS_CERT_SECRET_NAME="ingress-nginx-default-cert"
 log_info "Starting to generate TLS certificate for nginx ingress"
 
 cfssl gencert \
-    -ca="${OUTPUT_DIR_CERTS}/ca.pem" \
-    -ca-key="${OUTPUT_DIR_CERTS}/ca-key.pem" \
-    -config="${CSR_DIR}/ca-config.json" \
-    -profile=kubernetes \
-    "${CSR_DIR}/nginx-ingress-csr.json" | cfssljson -bare "${OUTPUT_DIR_CERTS}/nginx-ingress"
+  -ca="${OUTPUT_DIR_CERTS}/ca.pem" \
+  -ca-key="${OUTPUT_DIR_CERTS}/ca-key.pem" \
+  -config="${CSR_DIR}/ca-config.json" \
+  -profile=kubernetes \
+  "${CSR_DIR}/nginx-ingress-csr.json" | cfssljson -bare "${OUTPUT_DIR_CERTS}/nginx-ingress"
 
 run_command_on_remote_host "${VM_RUNTIME}" "${HOSTNAME_PREFIX}1" "install nginx ingress" <<EOC
     export KUBECONFIG="${VM_MOUNT_LOCATION}/output/kube-configs/admin.kubeconfig"
@@ -36,14 +36,15 @@ log_info "Creating default nginx ingress TLS termination secret"
 
 run_command_on_remote_host "${VM_RUNTIME}" "${HOSTNAME_PREFIX}1" "deploy testing nginx app" <<EOC
     export KUBECONFIG="${VM_MOUNT_LOCATION}/output/kube-configs/admin.kubeconfig"
-    kubectl -n ingress-nginx delete secret ${NGINX_TLS_CERT_SECRET_NAME}
+    kubectl get ns ingress-nginx || kubectl create ns ingress-nginx
+    kubectl -n ingress-nginx delete secret ${NGINX_TLS_CERT_SECRET_NAME} || :
     kubectl -n ingress-nginx create secret tls ${NGINX_TLS_CERT_SECRET_NAME} \
         --key "${OUTPUT_DIR_CERTS}/nginx-ingress-key.pem" \
         --cert "${OUTPUT_DIR_CERTS}/nginx-ingress.pem"
 EOC
 
 log_info "Starting to sleep for a short amount of time to allow nginx ingress to register hooks"
-# sleep 30
+sleep 30
 
 run_command_on_remote_host "${VM_RUNTIME}" "${HOSTNAME_PREFIX}1" "deploy testing nginx app" <<EOC
     export KUBECONFIG="${VM_MOUNT_LOCATION}/output/kube-configs/admin.kubeconfig"
