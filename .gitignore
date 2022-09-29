@@ -1,5 +1,12 @@
-output/*
+.DS_Store
 .swp
+
+output/*
 nginx.conf
 *.log
+
+# Docs
 docs/book
+docs/bin
+docs/.crates*
+docs/src/mdbook-plantuml-img

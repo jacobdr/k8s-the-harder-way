@@ -20,6 +20,10 @@ runs:
         cfssl version
         which cfssljson
         cfssljson -version
+    - name: Check production environment
+      shell: bash
+      run: |
+        make check-prod
     - name: Run Build script
       shell: bash
       run: |
