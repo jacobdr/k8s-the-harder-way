@@ -6,7 +6,6 @@ on:
       - opened
       - reopened
       - synchronize
-      - closed
   workflow_call: {}
 
 jobs:
