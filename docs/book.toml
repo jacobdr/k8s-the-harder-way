@@ -9,6 +9,10 @@ title = "k8s the hard(er) way"
 build-dir = "book"
 create-missing = true
 
+# https://github.com/sytsereitsma/mdbook-plantuml
+[preprocessor.plantuml]
+plantuml-cmd = "/usr/local/bin/plantuml"
+
 # https://rust-lang.github.io/mdBook/format/configuration/renderers.html
 [output.html]
 # theme = "my-theme"
