@@ -1,0 +1,26 @@
+name: PR Build
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      with:
+        install: true
+    - name: Install system dependencies
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openssl
+        curl -L --fail -o /usr/local/bin/cfssl https://github.com/cloudflare/cfssl/releases/download/v1.6.2/cfssl_1.6.2_linux_amd64
+        chmod 755 /usr/local/bin/cfssl
+        curl -L --fail -o /usr/local/bin/cfssljson https://github.com/cloudflare/cfssl/releases/download/v1.6.2/cfssljson_1.6.2_linux_amd64
+        chmod 755 /usr/local/bin/cfssljson
+        which cfssl
+        cfssl version
+        which cfssljson
+        cfssljson -version
+    - name: Run Build script
+      shell: bash
+      run: |
+        ./run.sh

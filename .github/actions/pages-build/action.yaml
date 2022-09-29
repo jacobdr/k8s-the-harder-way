@@ -1,0 +1,21 @@
+name: Pages Build
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Install mdBook
+      shell: bash
+      run: |
+        export DOWNLOAD_URL="https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz"
+        curl --fail -O -L "${DOWNLOAD_URL}"
+        tar xzf $(basename "${DOWNLOAD_URL}")
+        sudo mv mdbook /usr/local/bin
+        mdbook --version
+    - name: Generate Pages
+      shell: bash
+      run: |
+        mdbook build docs
+    - name: Check index.html
+      shell: bash
+      run: |
+        cat docs/book/index.html

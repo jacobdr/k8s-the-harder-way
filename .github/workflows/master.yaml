@@ -1,5 +1,24 @@
+name: Master Build
 on:
   push:
     branches:
       - master
-      - releases/**
+jobs:
+  master-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/pr-build
+  master-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/pages-build
+      # https://github.com/JamesIves/github-pages-deploy-action
+      - name: Deploy docs
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: docs/book
+          branch: gh-pages
