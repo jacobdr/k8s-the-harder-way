@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/pages-build
-      - name: Deploy preview
+      - name: Deploy docs pages preview
         uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: ./docs/book

@@ -10,7 +10,8 @@ jobs:
   pr-close-docs:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy preview
+      - uses: actions/checkout@v3
+      - name: Remove prior docs preview
         uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: ./docs/book
