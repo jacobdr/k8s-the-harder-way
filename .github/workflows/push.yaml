@@ -1,5 +1,8 @@
-name: Git Push
-on: [push]
+name: Build
+on:
+  []
+  # pull_request: {}
+  # workflow_call: {}
 jobs:
   precommit:
     runs-on: ubuntu-latest
