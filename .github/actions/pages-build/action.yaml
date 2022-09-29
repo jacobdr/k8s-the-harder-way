@@ -9,13 +9,20 @@ runs:
     - name: Install docs dependencies
       shell: bash
       run: |
-        sudo apt-get update
-        sudo apt-get install plantuml
+        # GH ubuntu already seems to have plantuml
+        # sudo apt-get update
+        # sudo apt-get install plantuml
         export DOWNLOAD_URL="https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz"
         curl --fail -O -L "${DOWNLOAD_URL}"
         tar xzf $(basename "${DOWNLOAD_URL}")
         sudo mv mdbook /usr/local/bin
         mdbook --version
+    # TODO: Speed up in the future with caching
+    # - name: Cache docs dependencies
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: ./docs/bin
+    #     key: ${{ hashFiles('docs/*') }}
     - name: Generate Pages
       shell: bash
       run: |
