@@ -1,20 +1,21 @@
-name: Pages Preview
-
+name: Pages Build
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - closed
+  workflow_call: {}
 
 concurrency: preview-${{ github.ref }}
 
 jobs:
-  deploy-preview:
+  pages-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install mdBook
+        run: |
+          export DOWNLOAD_URL="https://github.com/rust-lang/mdBook/releases/download/v0.4.21/mdbook-v0.4.21-x86_64-unknown-linux-gnu.tar.gz"
+          curl --fail -O -L "${DOWNLOAD_URL}"
+          tar xzf $(basename "${DOWNLOAD_URL}")
+          sudo mv mdbook /usr/local/bin
+          mdbook --version
       - name: Generate Pages
         run: |
           mkdir -p build
