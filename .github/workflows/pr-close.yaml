@@ -1,0 +1,17 @@
+name: PR Close
+
+on:
+  pull_request:
+    types:
+      - closed
+  workflow_call: {}
+
+jobs:
+  pr-close-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: ./docs/book
+          preview-branch: gh-pages
