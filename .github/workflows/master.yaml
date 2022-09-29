@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/pr-build.yaml
+      - uses: ./.github/actions/pr-build
   master-docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/pages-build.yaml
+      - uses: ./.github/actions/pages-build
