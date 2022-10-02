@@ -35,6 +35,6 @@ source "${PROJECT_ROOT}/scripts/helpers/networking.sh"
 "${PROJECT_ROOT}"/scripts/12-bootstrap-k8s-control-plane.sh
 "${PROJECT_ROOT}"/scripts/13-bootstrap-workers.sh
 "${PROJECT_ROOT}"/scripts/14-setup-cluster-dns.sh
-"${PROJECT_ROOT}"/scripts/15-install-load-balancer-controller.sh
-"${PROJECT_ROOT}"/scripts/16-setup-nginx-ingress.sh
+# "${PROJECT_ROOT}"/scripts/15-install-load-balancer-controller.sh
+# "${PROJECT_ROOT}"/scripts/16-setup-nginx-ingress.sh
 # "${PROJECT_ROOT}"/scripts/17-bootstrap-argocd.sh
