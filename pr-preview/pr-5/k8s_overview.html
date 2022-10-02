@@ -190,8 +190,8 @@ spec:
         - containerPort: 80
 </code></pre>
 <p>And it really is that simple. If I were to run <code>kubectl apply -f - &lt;&lt;&lt;&quot;CONTENTES FROM ABOVE&quot;</code>, <code>kubectl</code> simply takes my user input, validates it, looks up the details of the API server like its host and port, looks up some credentials, and then packages the YAML up into a pretty little HTTP request and sends it along to the remote server (perhaps with a sprinking of credentials). The &quot;control plane API server&quot; validates the permissions of the user making the HTTP request, validates the payload matches the expected schema for a &quot;create deployment&quot; request, and, if all looks good, continues on in the sequence as we drew it above.</p>
-<p>I mean the emperor wears no clothes here, see for yourself:</p>
-<pre><code class="language-bash">❯ kubectl apply -f output/nginx.deployment.yaml --v=8
+<p>I mean the emperor wears no clothes here, see for yourself if we jack up the <code>kubectl</code> <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-output-verbosity-and-debugging">logging verbosity</a>:</p>
+<pre><code class="language-bash">❯ kubectl apply --v=8 -f output/nginx.deployment.yaml
 I0929 15:15:17.887777   37013 loader.go:374] Config loaded from file:  /Users/jroberts/repos/personal/k8s-the-harder-way/output/kube-configs/admin.kubeconfig
 I0929 15:15:17.888660   37013 round_trippers.go:463] GET https://127.0.0.1:6443/openapi/v2?timeout=32s
 I0929 15:15:17.888668   37013 round_trippers.go:469] Request Headers:
@@ -220,10 +220,17 @@ I0929 15:15:18.005145   37013 request.go:1073] Response Body: {&quot;kind&quot;:
 deployment.apps/nginx created
 I0929 15:15:18.005711   37013 apply.go:466] Running apply post-processor function`
 </code></pre>
-<p>Sure there was a little back and forth in the beginning related to validation (<code>kubectl</code> by default actually tries to apply client-side validation by first looking up the OpenAPI scheme associated with the API server it going to send the request to eventually, which can be turned off with the <code>--validate='ignore'</code>). But do you see the line <code>POST https://127.0.0.1:6443/apis/apps/v1/namespaces/default/deployments?fieldManager=kubectl-client-side-apply&amp;fieldValidation=Strict</code>? Pretty much did what I told you. (Note, this is actually a lie, but its a white lie... if we set <code>--server-side=true</code> it wouldn't be though).</p>
+<p>Sure there was a little back and forth in the beginning related to validation (<code>kubectl</code> by default actually tries to apply client-side validation by first looking up the OpenAPI scheme associated with the API server it going to send the request to eventually, which can be turned off with the <code>--validate='ignore'</code>). But do you see the line <code>POST https://127.0.0.1:6443/apis/apps/v1/namespaces/default/deployments?fieldManager=kubectl-client-side-apply&amp;fieldValidation=Strict</code>? Pretty much did what I told you -- kubectl took our input, validated it, wrapped it in an HTTP request, and then sent that along to the control plane API server who created a <code>deployment.apps/nginx</code> for us (whatever that is).</p>
+<p>(Note, the above is actually still technically a lie, but its a white lie simplification... if we set <code>--server-side=true</code> it would be pretty close to true though).</p>
 <p><em>TODO: Add a page on kubectl and client-side application and validation</em></p>
 <h3 id="launching-a-pod-level-1-unpacking-the-components-on-the-control-plane"><a class="header" href="#launching-a-pod-level-1-unpacking-the-components-on-the-control-plane">Launching a pod: Level 1: Unpacking the components on the control plane</a></h3>
-<p>So pretty conveniently in the above sequence diagram we just draw a box for the &quot;control plane&quot; actor up at the top. But the control plane isn't just this API server thing we alluded to in the prior section. Its actually a few different components all working together that create the apparition we call the &quot;control plane&quot;.</p>
+<p>So pretty conveniently in the above sequence diagram we just draw a box for the &quot;control plane&quot; actor up at the top. But the control plane isn't just this API server thing we alluded to in the prior section. Its actually a few different components all working together that create the apparition we call the &quot;control plane&quot;. Let's dive into it.</p>
+<h4 id="overview"><a class="header" href="#overview">Overview</a></h4>
+<h4 id="etcd"><a class="header" href="#etcd">etcd</a></h4>
+<h4 id="kube-apiserver"><a class="header" href="#kube-apiserver">kube-apiserver</a></h4>
+<h4 id="kube-scheduler"><a class="header" href="#kube-scheduler">kube-scheduler</a></h4>
+<h4 id="kube-controller-manager"><a class="header" href="#kube-controller-manager">kube-controller-manager</a></h4>
+<h3 id="launching-a-pod-level-2-a-detour-to-talk-about-authentication-and-networking"><a class="header" href="#launching-a-pod-level-2-a-detour-to-talk-about-authentication-and-networking">Launching a pod: Level 2: A detour to talk about authentication and networking</a></h3>
 
                     </main>
 
