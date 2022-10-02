@@ -107,10 +107,10 @@ spec:
 
 And it really is that simple. If I were to run `kubectl apply -f - <<<"CONTENTES FROM ABOVE"`, `kubectl` simply takes my user input, validates it, looks up the details of the API server like its host and port, looks up some credentials, and then packages the YAML up into a pretty little HTTP request and sends it along to the remote server (perhaps with a sprinking of credentials). The "control plane API server" validates the permissions of the user making the HTTP request, validates the payload matches the expected schema for a "create deployment" request, and, if all looks good, continues on in the sequence as we drew it above.
 
-I mean the emperor wears no clothes here, see for yourself:
+I mean the emperor wears no clothes here, see for yourself if we jack up the `kubectl` [logging verbosity](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-output-verbosity-and-debugging):
 
 ```bash
-❯ kubectl apply -f output/nginx.deployment.yaml --v=8
+❯ kubectl apply --v=8 -f output/nginx.deployment.yaml
 I0929 15:15:17.887777   37013 loader.go:374] Config loaded from file:  /Users/jroberts/repos/personal/k8s-the-harder-way/output/kube-configs/admin.kubeconfig
 I0929 15:15:17.888660   37013 round_trippers.go:463] GET https://127.0.0.1:6443/openapi/v2?timeout=32s
 I0929 15:15:17.888668   37013 round_trippers.go:469] Request Headers:
@@ -140,10 +140,25 @@ deployment.apps/nginx created
 I0929 15:15:18.005711   37013 apply.go:466] Running apply post-processor function`
 ```
 
-Sure there was a little back and forth in the beginning related to validation (`kubectl` by default actually tries to apply client-side validation by first looking up the OpenAPI scheme associated with the API server it going to send the request to eventually, which can be turned off with the `--validate='ignore'`). But do you see the line `POST https://127.0.0.1:6443/apis/apps/v1/namespaces/default/deployments?fieldManager=kubectl-client-side-apply&fieldValidation=Strict`? Pretty much did what I told you. (Note, this is actually a lie, but its a white lie... if we set `--server-side=true` it wouldn't be though).
+Sure there was a little back and forth in the beginning related to validation (`kubectl` by default actually tries to apply client-side validation by first looking up the OpenAPI scheme associated with the API server it going to send the request to eventually, which can be turned off with the `--validate='ignore'`). But do you see the line `POST https://127.0.0.1:6443/apis/apps/v1/namespaces/default/deployments?fieldManager=kubectl-client-side-apply&fieldValidation=Strict`? Pretty much did what I told you -- kubectl took our input, validated it, wrapped it in an HTTP request, and then sent that along to the control plane API server who created a `deployment.apps/nginx` for us (whatever that is).
+
+(Note, the above is actually still technically a lie, but its a white lie simplification... if we set `--server-side=true` it would be pretty close to true though).
 
 _TODO: Add a page on kubectl and client-side application and validation_
 
 ### Launching a pod: Level 1: Unpacking the components on the control plane
 
-So pretty conveniently in the above sequence diagram we just draw a box for the "control plane" actor up at the top. But the control plane isn't just this API server thing we alluded to in the prior section. Its actually a few different components all working together that create the apparition we call the "control plane".
+So pretty conveniently in the above sequence diagram we just draw a box for the "control plane" actor up at the top. But the control plane isn't just this API server thing we alluded to in the prior section. Its actually a few different components all working together that create the apparition we call the "control plane". Let's dive into it.
+
+#### Overview
+
+#### etcd
+
+#### kube-apiserver
+
+#### kube-scheduler
+
+#### kube-controller-manager
+
+
+### Launching a pod: Level 2: A detour to talk about authentication and networking
