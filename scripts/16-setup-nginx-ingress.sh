@@ -44,7 +44,7 @@ run_command_on_remote_host "${VM_RUNTIME}" "${HOSTNAME_PREFIX}1" "deploy testing
 EOC
 
 log_info "Starting to sleep for a short amount of time to allow nginx ingress to register hooks"
-sleep 30
+sleep 45
 
 run_command_on_remote_host "${VM_RUNTIME}" "${HOSTNAME_PREFIX}1" "deploy testing nginx app" <<EOC
     export KUBECONFIG="${VM_MOUNT_LOCATION}/output/kube-configs/admin.kubeconfig"
