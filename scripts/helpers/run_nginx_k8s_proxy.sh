@@ -27,6 +27,13 @@ export -f get_ingress_ip_address
 function generate_nginx_configuration() {
     local ingress_external_ip
     ingress_external_ip=$(get_ingress_ip_address)
+    log_info "Ingress IP address candidate: ${ingress_external_ip}"
+
+    if ! [[ ${ingress_external_ip} =~ (.+)\.(.+)\.(.+)\.(.+) ]]; then
+        log_error "Failed to find ingress IP address for the nginx-ingress. Got ${ingress_external_ip}"
+        log_error "Something is wrong and we won't be able to proxy traffic into the cluster. Exiting"
+        exit 1
+    fi
 
     log_info "Resolved ingress IP address to: ${ingress_external_ip}"
 

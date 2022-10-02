@@ -7,7 +7,6 @@ PROJECT_ROOT=$(cd "${CURRENT_DIRECTORY}/.." && pwd)
 # shellcheck source=../scripts/helpers/logging.sh
 source "${PROJECT_ROOT}/scripts/helpers/logging.sh"
 
-mkdir -p "${PROJECT_ROOT}/bin"
 MDBOOK_PLANTUML_VERSION=0.8.0
 
 if ! [[ -f "${CURRENT_DIRECTORY}/bin/mdbook-plantuml" ]] ||

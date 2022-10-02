@@ -10,6 +10,8 @@ PROJECT_ROOT=$(cd "${CURRENT_DIRECTORY}/.." && pwd)
 # shellcheck source=../scripts/helpers/logging.sh
 source "${PROJECT_ROOT}/scripts/helpers/logging.sh"
 
+log_info "Starting to check for required system dependencies...."
+
 FAILED_DEPS=0
 
 if ! which cfssl; then

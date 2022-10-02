@@ -1813,8 +1813,9 @@ webhooks:
 EOF
 EOC
 
-log_info "Start to sleep for a small amount of time to allow validating webhook for metallb to spin up"
-sleep 30
+SLEEP_SEONCDS=100
+log_info "Start to sleep (${SLEEP_SEONCDS} seconds) for a small amount of time to allow validating webhook for metallb to spin up"
+sleep "${SLEEP_SEONCDS}"
 
 run_command_on_remote_host "${VM_RUNTIME}" "${HOSTNAME_PREFIX}1" "install loadbalancer controller part 2-- metallb" <<EOC
   export KUBECONFIG="${VM_MOUNT_LOCATION}/output/kube-configs/admin.kubeconfig"
