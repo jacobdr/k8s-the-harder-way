@@ -3,8 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>k8s the hard(er) way</title>
-        <meta name="robots" content="noindex" />
+        <title>k8s overview and architecture - k8s the hard(er) way</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -76,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="prerequisites.html">Prerequisites</a></li><li class="chapter-item expanded affix "><a href="k8s_overview.html">k8s overview and architecture</a></li><li class="chapter-item expanded affix "><li class="part-title">Guide</li><li class="chapter-item expanded "><a href="chapter_0.html"><strong aria-hidden="true">1.</strong> Chapter 0</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="prerequisites.html">Prerequisites</a></li><li class="chapter-item expanded affix "><a href="k8s_overview.html" class="active">k8s overview and architecture</a></li><li class="chapter-item expanded affix "><li class="part-title">Guide</li><li class="chapter-item expanded "><a href="chapter_0.html"><strong aria-hidden="true">1.</strong> Chapter 0</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -135,57 +134,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="welcome"><a class="header" href="#welcome">Welcome!</a></h1>
-<p>If you are looking to increase your knowlege of how kubernetes (k8s) works behind the scenes, you have arrived at the right place. We'll walk through a series of guided tutorials that cover:</p>
-<ul>
-<li>how k8s is architected</li>
-<li>what the various k8s control plane components do and how they are run</li>
-<li>the k8s &quot;worker node&quot; machinery that actually drive pod workloads</li>
-<li>k8s cluster (and general) networking</li>
-</ul>
-<p>We'll make heavy use of links to referene k8s official documentation and other good tutorials and knowledge resources. You can choose to read them as you work through the tutorials or save them for future reference as you need.</p>
-<p>Another thing we do is assume a pretty basic knowledge of Linux systems, so thre are a lot of side-bars, asides, and meanders. If you already have the knowledge, bear with us -- we strive to be as accessible as possible to increase both k8s knowledge and general sysadmin / computing competencies.</p>
-<h2 id="general-approach"><a class="header" href="#general-approach">General Approach</a></h2>
-<ol>
-<li>We'll make a small pit-stop to make sure you have the tools needed to actually run the workshops in this guide</li>
-<li>Go over k8s architecture, the responsibilites and components of the control plane and worker nodes, and networking concepts</li>
-<li>Walk through each individual step needed along the way needed to get k8s bare-metal cluster stood up</li>
-<li>Run the entire code end-to-end to get a cluster spun up on your local machine</li>
-</ol>
-<h2 id="next-up"><a class="header" href="#next-up">Next Up</a></h2>
-<p>To get started, jump into the next section to set up everything you need to run our code on your local machine.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h1>
-<p>Before we begin, we really need to ensure that your machine has the required tools needed to run the rest of this tutorial.</p>
-<h2 id="clone-our-repository"><a class="header" href="#clone-our-repository">Clone our repository</a></h2>
-<p>You will need access to our source code (cough... set of bash scripts) to run the tutorials on your local machine.</p>
-<pre><code class="language-bash">git clone https://github.com/jacobdr/k8s-the-harder-way.git
-</code></pre>
-<h2 id="get-a-system-package-manager"><a class="header" href="#get-a-system-package-manager">Get a system package manager</a></h2>
-<p>System package managers can do many things, but at their core their responsibility is to get useful executables and system libraries from public sources onto your local machine. If your computer did not leave the factory with <code>curl</code> installed on it, a package manager would help you install that tool and make it available to you as a CLI / executable within your terminal.</p>
-<p>Sometimes system managers install pre-built binaries (lift-and-shift the correct executable onto your local machine), other times they distribute the source code and dependencies, and provide a recipe that executes on your box to turn the source into executable files that you can then run.</p>
-<p>Package managers are generally pretty operating system specific (e.g. Ubuntu has <code>aptitude</code> aka <code>apt</code>, OS X <code>homebrew</code> aka <code>brew</code>, CentOS/RedHat <code>yum</code>, Alpine <code>apk</code>). Each package manager distributes their &quot;recipes&quot; (read: packages) differently -- Cloudflare has a <a href="https://blog.cloudflare.com/using-cloudflare-r2-as-an-apt-yum-repository/">really friendly tutorial</a> that unapcks how aptitude works, and Homebrew has a <a href="https://docs.brew.sh/Formula-Cookbook">cookbook for how their formulae work</a>.</p>
-<p>Anyway, enough on package managers.... Lets actually make sure you have one.</p>
-<h3 id="os-x"><a class="header" href="#os-x">OS X</a></h3>
-<p><a href="https://brew.sh">Homebrew</a> is required to install a series of CLI tools that our required by this project. See the official site for installation instructions. Please make sure that PATH variable where <code>brew</code> installs executables to is availabe on your $PATH. Their docs and StackOverflow will do a better job of helping you out... Just know by the end of this step you should be able to open a fresh terminal and run <code>brew --help</code> and see output.</p>
-<h3 id="linux"><a class="header" href="#linux">Linux</a></h3>
-<p>If you are on Linux you probably already are bored by all this talk of package managers and know how to use yours.... Lets move on.</p>
-<h2 id="install-required-packages--tools"><a class="header" href="#install-required-packages--tools">Install Required Packages + Tools</a></h2>
-<p>This project makes use of a few different tools that you are going to need if you want to follow along. To check what you are missing, run <code>make check-prod</code> from the root of the repository. It should tell you what tools (if any) you are missing and need to install via your package manager.</p>
-<p>When all goes well it should look something like the following....</p>
-<pre><code class="language-bash">❯ make check-prod
-./dev/check-required-prod-dependencies.sh
-k8s::check-required-prod-dependencies.sh::INFO -- Starting to check for required system dependencies....
-/opt/homebrew/bin/cfssl
-/opt/homebrew/bin/cfssljson
-/usr/local/bin/docker
-/opt/homebrew/bin/kubectl
-/usr/bin/openssl
-k8s::check-required-prod-dependencies.sh::INFO -- All required production dependencies are installed
-</code></pre>
-<p>If you are misisng anything we try to provide useful inline links to the official docs of our dependendent projects that should contain installation instructions. Some of these projects should have official packages available for your package manager for easy installation, but for others you might need to download the release binary(ies) and copy it to a location available on your PATH.</p>
-<p><em>Contribution Welcome: Make a PR that improves the <code>dev/check-required-prod-dependencies.sh</code> script with better instructions for each component</em></p>
-<p>Re-run <code>make check-prod</code> until such time as it exits successfully (i.e. with a zero exit code) before moving on to the next step.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="kubernetes-overview-brain-dump"><a class="header" href="#kubernetes-overview-brain-dump">Kubernetes Overview (Brain Dump)</a></h1>
+                        <h1 id="kubernetes-overview-brain-dump"><a class="header" href="#kubernetes-overview-brain-dump">Kubernetes Overview (Brain Dump)</a></h1>
 <p>If you are arriving here and you don't know....</p>
 <ul>
 <li>what kubernetes is... <a href="https://kubernetes.io/docs/concepts/overview/">read this</a></li>
@@ -282,69 +231,29 @@ I0929 15:15:18.005711   37013 apply.go:466] Running apply post-processor functio
 <h4 id="kube-scheduler"><a class="header" href="#kube-scheduler">kube-scheduler</a></h4>
 <h4 id="kube-controller-manager"><a class="header" href="#kube-controller-manager">kube-controller-manager</a></h4>
 <h3 id="launching-a-pod-level-2-a-detour-to-talk-about-authentication-and-networking"><a class="header" href="#launching-a-pod-level-2-a-detour-to-talk-about-authentication-and-networking">Launching a pod: Level 2: A detour to talk about authentication and networking</a></h3>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-0---vm-bootstrapping"><a class="header" href="#chapter-0---vm-bootstrapping">Chapter 0 - VM Bootstrapping</a></h1>
-<h2 id="code"><a class="header" href="#code">Code</a></h2>
-<pre><code class="language-bash">#!/usr/bin/env bash
-set -euo pipefail
-
-: &quot;${PROJECT_ROOT?? PROJECT_ROOT must be defined}&quot;
-: &quot;${VM_RUNTIME?? VM_RUNTIME must be defined}&quot;
-: &quot;${CNT_VMS:?CNT_VMS must be defined}&quot;
-: &quot;${HOSTNAME_PREFIX:?HOSTNAME_PREFIX must be defined}&quot;
-: &quot;${DOWNLOAD_CACHE_DIR:?DOWNLOAD_CACHE_DIR must be defined}&quot;
-
-log_info &quot;Starting to create ${CNT_VMS} VMs with runtime ${VM_RUNTIME}&quot;
-
-if [[ &quot;${VM_RUNTIME}&quot; = &quot;docker&quot; ]]; then
-    docker build -f &quot;${PROJECT_ROOT}/Dockerfile&quot; -t k8s-hard-way --load &quot;${PROJECT_ROOT}&quot;
-    (docker ps -a | grep k8s-hard-way | awk '{print $1}' | xargs docker rm -f) &amp;&gt;/dev/null || :
-    sleep 2
-    mkdir -p &quot;${PROJECT_ROOT}/output/downloads&quot;
-elif [[ &quot;${VM_RUNTIME}&quot; = &quot;lima&quot; ]]; then
-    sudo rm -rf /private/var/run/lima
-    limactl sudoers | sudo tee /private/etc/sudoers.d/lima 1&gt;/dev/null
-fi
-
-WORKER_ITERATOR=1
-
-while [ &quot;$WORKER_ITERATOR&quot; -le &quot;${CNT_VMS}&quot; ]; do
-    log_info &quot;Starting to launch VM ${WORKER_ITERATOR} of ${CNT_VMS} using ${VM_RUNTIME}&quot;
-    VM_HOSTNAME=&quot;${HOSTNAME_PREFIX}${WORKER_ITERATOR}&quot;
-    if [[ &quot;${VM_RUNTIME}&quot; = &quot;docker&quot; ]]; then
-        docker rm -f --volumes &quot;${VM_HOSTNAME}&quot;
-        docker run \
-            --name &quot;${VM_HOSTNAME}&quot; \
-            --hostname=&quot;${VM_HOSTNAME}&quot; \
-            --detach \
-            --privileged \
-            --cap-add=NET_ADMIN \
-            --tmpfs /run/lock \
-            --volume &quot;${VM_HOSTNAME}-temp:/tmp&quot; \
-            --volume &quot;${PROJECT_ROOT}:${PROJECT_ROOT}:ro&quot; \
-            --volume &quot;${PROJECT_ROOT}/output/downloads:${DOWNLOAD_CACHE_DIR}&quot; \
-            k8s-hard-way
-
-    elif [[ &quot;${VM_RUNTIME}&quot; = &quot;lima&quot; ]]; then
-        limactl stop &quot;${VM_HOSTNAME}&quot; &amp;&gt;/dev/null || limactl stop &quot;${VM_HOSTNAME}&quot; --force &amp;&gt;/dev/null || true
-        limactl delete &quot;${VM_HOSTNAME}&quot; &amp;&gt;/dev/null || limactl delete &quot;${VM_HOSTNAME}&quot; --force &amp;&gt;/dev/null || true
-        true | (limactl start --name &quot;${VM_HOSTNAME}&quot; &quot;${PROJECT_ROOT}/lima-config.yaml&quot;) 2&gt;&amp;1 | cat # grep 'progress|requirement|WARN|FAT'
-    fi
-
-    log_info &quot;Successfully launched VM ${WORKER_ITERATOR} (runtime: ${VM_RUNTIME})&quot;
-    WORKER_ITERATOR=$((WORKER_ITERATOR + 1))
-done
-</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="prerequisites.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="chapter_0.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         <div style="clear: both"></div>
                     </nav>
                 </div>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="prerequisites.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="chapter_0.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
@@ -360,10 +269,5 @@ done
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
-        <script type="text/javascript">
-        window.addEventListener('load', function() {
-            window.setTimeout(window.print, 100);
-        });
-        </script>
     </body>
 </html>

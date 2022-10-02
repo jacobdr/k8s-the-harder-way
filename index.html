@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="chapter-item expanded affix "><a href="prerequisites.html">Prerequisites</a></li><li class="chapter-item expanded affix "><li class="part-title">Guide</li><li class="chapter-item expanded "><a href="chapter_0.html"><strong aria-hidden="true">1.</strong> Chapter 0</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html" class="active">Introduction</a></li><li class="chapter-item expanded affix "><a href="prerequisites.html">Prerequisites</a></li><li class="chapter-item expanded affix "><a href="k8s_overview.html">k8s overview and architecture</a></li><li class="chapter-item expanded affix "><li class="part-title">Guide</li><li class="chapter-item expanded "><a href="chapter_0.html"><strong aria-hidden="true">1.</strong> Chapter 0</a></li><li class="chapter-item expanded affix "><li class="part-title">Appendix</li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,9 +134,25 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>This is the landing page</p>
-<p><img src="mdbook-plantuml-img/099ffab5f5e292799ab82f248bfb3d1623fc5500.svg" alt="" /></p>
+                        <h1 id="welcome"><a class="header" href="#welcome">Welcome!</a></h1>
+<p>If you are looking to increase your knowlege of how kubernetes (k8s) works behind the scenes, you have arrived at the right place. We'll walk through a series of guided tutorials that cover:</p>
+<ul>
+<li>how k8s is architected</li>
+<li>what the various k8s control plane components do and how they are run</li>
+<li>the k8s &quot;worker node&quot; machinery that actually drive pod workloads</li>
+<li>k8s cluster (and general) networking</li>
+</ul>
+<p>We'll make heavy use of links to referene k8s official documentation and other good tutorials and knowledge resources. You can choose to read them as you work through the tutorials or save them for future reference as you need.</p>
+<p>Another thing we do is assume a pretty basic knowledge of Linux systems, so thre are a lot of side-bars, asides, and meanders. If you already have the knowledge, bear with us -- we strive to be as accessible as possible to increase both k8s knowledge and general sysadmin / computing competencies.</p>
+<h2 id="general-approach"><a class="header" href="#general-approach">General Approach</a></h2>
+<ol>
+<li>We'll make a small pit-stop to make sure you have the tools needed to actually run the workshops in this guide</li>
+<li>Go over k8s architecture, the responsibilites and components of the control plane and worker nodes, and networking concepts</li>
+<li>Walk through each individual step needed along the way needed to get k8s bare-metal cluster stood up</li>
+<li>Run the entire code end-to-end to get a cluster spun up on your local machine</li>
+</ol>
+<h2 id="next-up"><a class="header" href="#next-up">Next Up</a></h2>
+<p>To get started, jump into the next section to set up everything you need to run our code on your local machine.</p>
 
                     </main>
 
